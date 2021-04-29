@@ -2,6 +2,4 @@
 uws_scripts
 ###########
 
-
-
-.. Add a brief (few sentence) description of what this package provides.
+Shell scripts to be executed by the (prototype) UWS service.
