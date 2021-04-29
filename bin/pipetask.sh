@@ -20,6 +20,7 @@ pipetask run -p "$PIPELINE_URL" \
     --output-run "${OUTPUT_COLLECTION}/run" \
     -d "$DATA_QUERY"
 
-paths=$(butler query-datasets --collections $OUTPUT_COLLECTION/run $BUTLER_REPO "metricvalue_*" | sed -e 's|.*file://([^ ]*) .*|\1|')
+# OUTPUT_GLOB matches dataset types that should be made into outputs
+paths=$(butler query-datasets --collections $OUTPUT_COLLECTION/run $BUTLER_REPO "$OUTPUT_GLOB" | sed -e 's|.*file://([^ ]*) .*|\1|')
 
-cp $paths $JOB_OUTPUT_DIR
+ln -s $paths $JOB_OUTPUT_DIR
