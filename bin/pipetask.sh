@@ -21,6 +21,9 @@ pipetask run -p "$PIPELINE_URL" \
     -d "$DATA_QUERY"
 
 # OUTPUT_GLOB matches dataset types that should be made into outputs
-paths=$(butler query-datasets --collections $OUTPUT_COLLECTION/run $BUTLER_REPO "$OUTPUT_GLOB" | sed -e 's|.*file://([^ ]*) .*|\1|')
-
-ln -s $paths $JOB_OUTPUT_DIR
+butler retrieve-artifacts \
+    --collections "${OUTPUT_COLLECTION}/run"
+    --dataset-type "$OUTPUT_GLOB" \
+    --transfer auto \
+    --no-preserve-path \
+    "$BUTLER_REPO" "$JOB_OUTPUT_DIR"
