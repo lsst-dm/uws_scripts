@@ -122,6 +122,7 @@ if __name__ == '__main__':
                 'VISIT': visit,
                 'DETECTOR': detector,
                 'INSTRUMENT': instrument,
+                'EUPS_TAG': 'w_2021_19',
 	       }
     for k, v in env_dict.items():
         print(f'export {k}={v}')
