@@ -46,17 +46,17 @@ def get_job(job_id, property=None):
             '{}/job/{}/{}'.format(config['apiBaseUrl'], job_id, property),
         )
         try:
-            print('GET {}/job/{}/{} :\nHTTP code: {}\n{}\n\n'.format('http//uws-server-', job_id, property, response.status_code, json.dumps(response.json(), indent=2)))
+            print('GET {}/job/{}/{} :\nHTTP code: {}\n{}\n\n'.format(config['apiBaseUrl'], job_id, property, response.status_code, json.dumps(response.json(), indent=2)))
         except:
-            print('GET {}/job/{}/{} :\nHTTP code: {}\n{}\n\n'.format(globals.API_BASEPATH, job_id, property, response.status_code, response))
+            print('GET {}/job/{}/{} :\nHTTP code: {}\n{}\n\n'.format(config['apiBaseUrl'], job_id, property, response.status_code, response))
     else:
         response = requests.get(
             '{}/job/{}'.format(config['apiBaseUrl'], job_id),
         )
         try:
-            print('GET {}/job/{} :\nHTTP code: {}\n{}\n\n'.format(globals.API_BASEPATH, job_id, response.status_code, json.dumps(response.json(), indent=2)))
+            print('GET {}/job/{} :\nHTTP code: {}\n{}\n\n'.format(config['apiBaseUrl'], job_id, response.status_code, json.dumps(response.json(), indent=2)))
         except:
-            print('GET {}/job/{} :\nHTTP code: {}\n{}\n\n'.format(globals.API_BASEPATH, job_id, response.status_code, response))
+            print('GET {}/job/{} :\nHTTP code: {}\n{}\n\n'.format(config['apiBaseUrl'], job_id, response.status_code, response))
     return response
 
 
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     
     print('Create a job:')
     visit = 903332
-    detector = 20
+    detector = 19
     instrument = 'HSC'
     collection = 'shared/valid_hsc_all'
     creation_time = datetime.timestamp(datetime.now())
@@ -110,25 +110,27 @@ if __name__ == '__main__':
     env_dict = {
 		'PIPELINE_TASK_CLASS': 'lsst.pipe.tasks.calexpCutout.CalexpCutoutTask',
 		'PROJECT_SUBPATH': 'krughoff/projects/uws_cutout',
-		'BUTLER_REPO': 'krughoff/projects/uws_cutout/validation_hsc_gen3',
+		'BUTLER_REPO': '/project/krughoff/projects/uws_cutout/validation_hsc_gen3',
 		'OUTPUT_COLLECTION': out_collection,
 		'PUT_COLLECTION': put_collection,
 		'RUN_OPTIONS': f'-i {collection},{put_collection}',
 		'DATA_QUERY': f"visit={visit} AND detector={detector} AND instrument='{instrument}'",
                 'OUTPUT_GLOB': 'calexp_cutouts',
-                'CUTOUT_RA': 216.68,
-                'CUTOUT_DEC': -0.53,
-                'CUTOUT_SIZE': 0.01,
+                'CUTOUT_RA': 319.89828,
+                'CUTOUT_DEC': -0.3882156,
+                'CUTOUT_SIZE': 20,
                 'VISIT': visit,
                 'DETECTOR': detector,
                 'INSTRUMENT': instrument,
 	       }
+    for k, v in env_dict.items():
+        print(f'export {k}={v}')
     environment = [{'name': k, 'value': v} for k, v in env_dict.items()]
     create_response = create_job(
         run_id = 'simons-cutout',
-        command = 'cd $JOB_SOURCE_DIR && bash bin/simon_pipetask.sh > $JOB_OUTPUT_DIR/pipe_task.log', 
+        command = 'cd $JOB_SOURCE_DIR && bash bin/simon_pipetask.sh > $JOB_OUTPUT_DIR/pipe_task.log 2>&1', 
         git_url = 'https://github.com/lsst-dm/uws_scripts',
-        git_ref = 'tickets/DM-29375',
+        commit_ref = 'u/krughoff/DM-29375',
         environment = environment
     )
     job_id = create_response.json()['job_id']
