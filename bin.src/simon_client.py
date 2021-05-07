@@ -8,10 +8,10 @@ config = {
 }
 
 
-def get_result(result_id=''):
-    url = f'{config["apiBaseUrl"]}/job/result/{result_id}'
+def get_result(result, job_id):
+    url = f'{config["apiBaseUrl"]}/job/result/{job_id}/{result["id"]}'
     try:
-        local_filename = url.split('/')[-1]
+        local_filename = result['uri'].split('/')[-1]
         # NOTE the stream=True parameter below
         with requests.get(url, stream=True) as r:
             r.raise_for_status()
@@ -124,8 +124,6 @@ if __name__ == '__main__':
                 'INSTRUMENT': instrument,
                 'JOB_IMAGE_TAG': '7-stack-lsst_distrib-w_2021_19',
 	       }
-    for k, v in env_dict.items():
-        print(f'export {k}={v}')
     environment = [{'name': k, 'value': v} for k, v in env_dict.items()]
     create_response = create_job(
         run_id = 'simons-cutout',
@@ -152,8 +150,4 @@ if __name__ == '__main__':
         print('Fetching results...')
         results = get_job(job_id, property='results').json()
         for result in results:
-            downloaded_file = get_result(result_id=result['id'])
-            if downloaded_file:
-                print(f'Contents of result file "{downloaded_file}":')
-                with open(downloaded_file, 'r') as dfile:
-                    print(dfile.read())
+            downloaded_file = get_result(result, job_id)
