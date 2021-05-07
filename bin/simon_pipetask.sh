@@ -9,6 +9,7 @@ if [[ -n $EUPS_TAG ]]; then
 else
     setup lsst_distrib
 fi
+eups list lsst_distrib
 
 python bin/put_many_positions.py $BUTLER_REPO $VISIT $DETECTOR $INSTRUMENT $PUT_COLLECTION --ra $CUTOUT_RA --dec $CUTOUT_DEC --size $CUTOUT_SIZE
 
