@@ -122,13 +122,14 @@ if __name__ == '__main__':
                 'VISIT': visit,
                 'DETECTOR': detector,
                 'INSTRUMENT': instrument,
+                'JOB_IMAGE_TAG': '7-stack-lsst_distrib-w_2021_19',
 	       }
     for k, v in env_dict.items():
         print(f'export {k}={v}')
     environment = [{'name': k, 'value': v} for k, v in env_dict.items()]
     create_response = create_job(
         run_id = 'simons-cutout',
-        command = 'cd $JOB_SOURCE_DIR && bash bin/simon_pipetask.sh > $JOB_OUTPUT_DIR/pipe_task.log 2>&1', 
+        command = 'cd $JOB_SOURCE_DIR && bash bin/simon_pipetask.sh i2>&1 > $JOB_OUTPUT_DIR/pipe_task.log', 
         git_url = 'https://github.com/lsst-dm/uws_scripts',
         commit_ref = 'u/krughoff/DM-29375',
         environment = environment
