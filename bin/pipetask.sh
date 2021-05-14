@@ -22,7 +22,7 @@ pipetask run -p "$PIPELINE_URL" \
 
 # OUTPUT_GLOB matches dataset types that should be made into outputs
 butler retrieve-artifacts \
-    --collections "${OUTPUT_COLLECTION}/run"
+    --collections "${OUTPUT_COLLECTION}/run" \
     --dataset-type "$OUTPUT_GLOB" \
     --transfer auto \
     --no-preserve-path \
