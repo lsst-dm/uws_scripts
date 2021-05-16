@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+exec > $JOB_OUTPUT_DIR/ocps.log 2>&1
+set -e -x
 
 # Load the software and environment configuration
 source "/opt/lsst/software/stack/loadLSST.bash"
