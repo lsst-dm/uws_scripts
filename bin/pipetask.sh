@@ -23,10 +23,12 @@
 #   OUTPUT_GLOB
 #     Pattern matching dataset types that should be made into outputs
 
-exec > $JOB_OUTPUT_DIR/ocps.log 2>&1
+exec > "$JOB_OUTPUT_DIR"/ocps.log 2>&1
 set -e -x
 
 # Load the software and environment configuration
+# Ignore external file
+# shellcheck disable=SC1091
 source "/opt/lsst/software/stack/loadLSST.bash"
 if [[ -n $EUPS_TAG ]]; then
     setup -t "$EUPS_TAG" lsst_distrib
@@ -36,6 +38,8 @@ fi
 
 OUTPUT_COLLECTION="u/ocps/$JOB_ID"
 
+# Ignore unquoted RUN_OPTIONS used to provide multiple command arguments
+# shellcheck disable=SC2086
 pipetask run -p "$PIPELINE_URL" \
     -b "$BUTLER_REPO" \
     -o "$OUTPUT_COLLECTION" \
