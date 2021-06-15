@@ -22,19 +22,29 @@
 #     Butler data query selecting datasets to be processed
 #   OUTPUT_GLOB
 #     Pattern matching dataset types that should be made into outputs
+#   DEBUG_PIPETASK_SH
+#     Optional; log loadLSST and setup lsst_distrib script executions
 
 exec > "$JOB_OUTPUT_DIR"/ocps.log 2>&1
-set -e -x
+
+# Exit on command failure
+set -e
+# Conditionally enable debug logging
+[ -n "$DEBUG_PIPETASK_SH" ] && set -x
 
 # Load the software and environment configuration
 # Ignore external file
 # shellcheck disable=SC1091
 source "/opt/lsst/software/stack/loadLSST.bash"
-if [[ -n $EUPS_TAG ]]; then
+
+if [[ -n "$EUPS_TAG" ]]; then
     setup -t "$EUPS_TAG" lsst_distrib
 else
     setup lsst_distrib
 fi
+
+# Always log these commands
+set -x
 
 OUTPUT_COLLECTION="u/ocps/$JOB_ID"
 
