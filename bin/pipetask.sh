@@ -50,7 +50,8 @@ OUTPUT_COLLECTION="u/ocps/$JOB_ID"
 
 # Ignore unquoted RUN_OPTIONS used to provide multiple command arguments
 # shellcheck disable=SC2086
-pipetask run -p "$PIPELINE_URL" \
+pipetask --long-log run \
+    -p "$PIPELINE_URL" \
     -b "$BUTLER_REPO" \
     -o "$OUTPUT_COLLECTION" \
     $RUN_OPTIONS \
