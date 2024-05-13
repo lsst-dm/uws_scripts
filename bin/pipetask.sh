@@ -25,7 +25,7 @@
 #   DEBUG_PIPETASK_SH
 #     Optional; log loadLSST and setup lsst_distrib script executions
 
-exec > "$JOB_OUTPUT_DIR"/ocps.log 2>&1
+exec > >(tee "$JOB_OUTPUT_DIR"/ocps.log) 2>&1
 
 # Exit on command failure
 set -e
